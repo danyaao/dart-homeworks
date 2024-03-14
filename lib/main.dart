@@ -1,56 +1,119 @@
-// ignore_for_file: prefer_final_fields, unused_field, prefer_function_declarations_over_variables, avoid_print
+// ignore_for_file: avoid_print
 
-typedef Strategy = double Function(List<String>, List<String>);
+class Person {
+  final String name;
 
-class PokerPlayer {
-  /// Список текущих карт в руке у игрока
-  List<String> _currentHand = ['King of clubs', 'Nine of hearts'];
+  Person({
+    required this.name,
+  });
 
-  /// Субъективная оценка выигрыша
-  double surenessInWin = 0;
+  @override
+  String toString() {
+    return name;
+  }
+}
 
-  /// Вычислить шансы на выигрыш
-  void calculateProbabilities(
-    List<String> cardOnDesk,
+class Team {
+  final String name;
+  final List<Person> members;
+  Trener? trener;
 
-    /// Это часть первого задания. [Strategy] пока не сущестивует.
-    ///
-    /// Опишите его.
-    Strategy strategy,
-  ) =>
-      surenessInWin = strategy(cardOnDesk, _currentHand);
+  Team({
+    required this.name,
+    required this.members,
+  });
+
+  @override
+  String toString() {
+    return '$name\n'
+        'members:${members.map((e) => e.name)}\n'
+        'trener:${trener?.name}';
+  }
+}
+
+class Gamer extends Person {
+  Team? team;
+  int gamesCount = 0;
+
+  Gamer({
+    required super.name,
+    this.team,
+    gamesCount,
+  }) {
+    team?.members.add(this);
+  }
+
+  @override
+  String toString() {
+    return '$name\n'
+        'team:${team?.name}\n'
+        'gamesCount:$gamesCount';
+  }
+}
+
+class Trener extends Person {
+  final Team team;
+  int trophiesCount = 0;
+
+  Trener({
+    required super.name,
+    required this.team,
+    trophiesCount,
+  }) {
+    team.trener = this;
+  }
+
+  @override
+  String toString() {
+    return '$name\n'
+        'team:${team.name}\n'
+        'trophiesCount:$trophiesCount';
+  }
+}
+
+class Doter extends Gamer {
+  int mmr;
+
+  Doter({
+    required super.name,
+    super.team,
+    super.gamesCount,
+    required this.mmr,
+  });
+
+  @override
+  String toString() {
+    return '$name\n'
+        'team:${team?.name}\n'
+        'gamesCount:$gamesCount\n'
+        'mmr:$mmr';
+  }
 }
 
 void main() {
-  final opponent = PokerPlayer();
-
-  /// Это часть первого задания. [Strategy] пока не сущестивует.
-  ///
-  /// Опишите его.
-  final Strategy fakeStrategy = (p0, p1) {
-    print(
-      'Карты на столе: '
-      '${p0.reduce(
-        (value, element) => '$value, $element',
-      )}',
-    );
-    print(
-      'Карты в руке оппонента: '
-      '${p1.reduce(
-        (value, element) => '$value, $element',
-      )}',
-    );
-
-    return 0.31;
-  };
-
-  opponent.calculateProbabilities(
-    ['Nine of diamonds', 'king of hearts'],
-    fakeStrategy,
+  final team = Team(
+    name: 'Surf',
+    members: [],
   );
 
-  print(
-    'Шансы оппонента на победу: '
-    '${opponent.surenessInWin}',
+  final trener = Trener(
+    name: 'Mark',
+    team: team,
   );
+
+  final gamer = Gamer(
+    name: 'Evgenia',
+    team: team,
+  );
+
+  final doter = Doter(
+    name: 'Daniil',
+    team: team,
+    mmr: 1000,
+  );
+
+  print(team);
+  print(trener);
+  print(gamer);
+  print(doter);
 }
