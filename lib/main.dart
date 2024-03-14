@@ -1,114 +1,39 @@
-// ignore_for_file: avoid_print, prefer_final_fields
-
-abstract interface class Sleeper {
-  void sleep();
-}
-
-class Swarm {
-  final String name;
-  final SwarmSize size;
-
-  Swarm({
-    required this.name,
-    required this.size,
-  });
-}
-
-enum SwarmSize {
-  small,
-  medium,
-  large,
-}
-
-class Frog implements Sleeper {
-  String _name;
-  final String species;
-  final int age;
-  bool isHungry = false;
-  final Swarm swarm;
-
-  Frog(
-    this._name,
-    this.species,
-    this.age, {
-    required this.swarm,
-  });
-
-  Frog.old(
-    this._name,
-    this.species,
-    this.swarm,
-  ) : age = 1000;
-
-  String get name => _name;
-
-  void eat() {
-    if (isHungry) {
-      print('Легушъка $_name наелась.');
-      isHungry = false;
+void main() {
+  while (!wantSleep()) {
+    if (wantEat()) {
+      eat();
     } else {
-      print('Легушъка $_name уже не голодна.');
+      if (needMoney() case [amount(), 1000000]) {
+        needALotOfMoney();
+        workHardly();
+      } else if (needMoney() case [amount(), 1000]) {
+        needSomeMoney();
+        work();
+      } else {
+        needNoMoney();
+        for (int i = 0; i < 11; i++) {
+          sleep();
+          i == 7 ? turnOffAlarm() : snooze();
+          if (i == 9) {
+            wakeUp();
+            break;
+          }
+        }
+      }
     }
   }
-
-  @override
-  void sleep() {
-    print('Легушъка спит');
-  }
 }
 
-class ColoredFrog extends Frog with Jumper {
-  final String color;
-
-  ColoredFrog(
-    String name,
-    String species,
-    int age,
-    Swarm swarm, [
-    this.color = 'синего',
-  ]) : super(
-          name,
-          species,
-          age,
-          swarm: swarm,
-        );
-
-  @override
-  void sleep() {
-    super.sleep();
-    print('Легушка цвета $color спит');
+bool wantEat() {
+  switch (wantFood()) {
+    case 'meat':
+      wantMeat();
+      return true;
+    case 'nuts':
+      wantNuts();
+      return true;
+    default:
+      wantNothing();
+      return false;
   }
-}
-
-mixin Jumper {
-  void jump() {
-    print('Прыг-скок');
-  }
-}
-
-void main() {
-  final frog = Frog(
-    'Ы',
-    'Легушъка',
-    2,
-    swarm: Swarm(name: 'Болото', size: SwarmSize.small),
-  );
-
-  final shreksSwarm = Swarm(
-    name: 'Болото Шрека',
-    size: SwarmSize.small,
-  );
-
-  final coloredFrog = ColoredFrog(
-    'Ъуъ',
-    'Легушъка Шрека',
-    2,
-    shreksSwarm,
-    'зеленого',
-  );
-
-  frog.eat();
-  coloredFrog.eat();
-  coloredFrog.jump();
-  coloredFrog.sleep();
 }
