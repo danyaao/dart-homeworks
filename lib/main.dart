@@ -1,118 +1,121 @@
 // ignore_for_file: avoid_print
 
-class Person {
+class Product {
+  final int id;
+  final String category;
   final String name;
+  final int price;
+  final int quantity;
 
-  Person({
+  Product({
+    required this.id,
+    required this.category,
     required this.name,
+    required this.price,
+    required this.quantity,
   });
 
   @override
   String toString() {
-    return name;
+    return '$id\t$category\t$name\t$price руб\t$quantity шт';
   }
 }
 
-class Team {
-  final String name;
-  final List<Person> members;
-  Trener? trener;
+abstract class Filter {
+  bool apply({required Product product});
+}
 
-  Team({
-    required this.name,
-    required this.members,
-  });
+class CategoryFilter implements Filter {
+  final String filteredCategory;
+
+  CategoryFilter({required this.filteredCategory});
 
   @override
-  String toString() {
-    return '$name\n'
-        'members:${members.map((e) => e.name)}\n'
-        'trener:${trener?.name}';
+  bool apply({required Product product}) {
+    return product.category == filteredCategory;
   }
 }
 
-class Gamer extends Person {
-  Team? team;
-  int gamesCount = 0;
+class PriceFilter implements Filter {
+  final int filteredPrice;
 
-  Gamer({
-    required super.name,
-    required this.team,
-    gamesCount,
-  }) {
-    team?.members.add(this);
-  }
+  PriceFilter({required this.filteredPrice});
 
   @override
-  String toString() {
-    return '$name\n'
-        'team:${team?.name}\n'
-        'gamesCount:$gamesCount';
+  bool apply({required Product product}) {
+    return product.price <= filteredPrice;
   }
 }
 
-class Trener extends Person {
-  final Team team;
-  int trophiesCount = 0;
+class QuantityFilter implements Filter {
+  final int filteredQuantity;
 
-  Trener({
-    required super.name,
-    required this.team,
-    trophiesCount,
-  }) {
-    team.trener = this;
-  }
+  QuantityFilter({required this.filteredQuantity});
 
   @override
-  String toString() {
-    return '$name\n'
-        'team:${team.name}\n'
-        'trophiesCount:$trophiesCount';
+  bool apply({required Product product}) {
+    return product.quantity <= filteredQuantity;
   }
 }
 
-class Doter extends Gamer {
-  int mmr;
+void applyFilter({
+  required List<Product> products,
+  required Filter filter,
+}) {
+  print('id\tКатегория\tНазвание\tЦена\tКоличество');
 
-  Doter({
-    required super.name,
-    super.team,
-    required this.mmr,
-  });
-
-  @override
-  String toString() {
-    return '$name\n'
-        'team:${team?.name}\n'
-        'gamesCount:$gamesCount\n'
-        'mmr:$mmr';
+  for (final product in products) {
+    if (filter.apply(product: product)) {
+      print(product);
+    }
   }
 }
 
 void main() {
-  final team = Team(
-    name: 'Surf',
-    members: [],
-  );
+  const articles = '''
+    1,хлеб,Бородинский,500,5
+    2,хлеб,Белый,200,15
+    3,молоко,Полосатый кот,50,53
+    4,молоко,Коровка,50,53
+    5,вода,Апельсин,25,100
+    6,вода,Бородинский,500,5
+    ''';
 
-  final trener = Trener(
-    name: 'Mark',
-    team: team,
-  );
+  List<String> articlesStrings = articles.split('\n');
 
-  final gamer = Gamer(
-    name: 'Evgenia',
-    team: team,
-  );
+  List<Product> products = [];
 
-  final doter = Doter(
-    name: 'Daniil',
-    team: team,
-    mmr: 1000,
-  );
+  for (String articleAsList in articlesStrings) {
+    List<String> productAsList = articleAsList.split(',');
 
-  print(team);
-  print(trener);
-  print(gamer);
-  print(doter);
+    if (productAsList.length == 5) {
+      int? id = int.tryParse(productAsList[0]);
+      String category = productAsList[1];
+      String name = productAsList[2];
+      int? price = int.tryParse(productAsList[3]);
+      int? quantity = int.tryParse(productAsList[4]);
+
+      if (id != null && price != null && quantity != null) {
+        products.add(
+          Product(
+            id: id,
+            category: category,
+            name: name,
+            price: price,
+            quantity: quantity,
+          ),
+        );
+      }
+    }
+  }
+
+  applyFilter(products: products, filter: CategoryFilter(filteredCategory: 'хлеб'));
+
+  print('\n');
+
+  applyFilter(products: products, filter: PriceFilter(filteredPrice: 500));
+
+  print('\n');
+
+  applyFilter(products: products, filter: QuantityFilter(filteredQuantity: 10));
 }
