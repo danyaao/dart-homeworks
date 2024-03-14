@@ -1,121 +1,198 @@
 // ignore_for_file: avoid_print
 
-class Product {
-  final int id;
-  final String category;
+class RawProductItem {
   final String name;
-  final int price;
-  final int quantity;
+  final String categoryName;
+  final String subcategoryName;
+  final DateTime expirationDate;
+  final int qty;
 
-  Product({
-    required this.id,
-    required this.category,
+  RawProductItem({
     required this.name,
-    required this.price,
-    required this.quantity,
+    required this.categoryName,
+    required this.subcategoryName,
+    required this.expirationDate,
+    required this.qty,
   });
-
-  @override
-  String toString() {
-    return '$id\t$category\t$name\t$price руб\t$quantity шт';
-  }
-}
-
-abstract class Filter {
-  bool apply({required Product product});
-}
-
-class CategoryFilter implements Filter {
-  final String filteredCategory;
-
-  CategoryFilter({required this.filteredCategory});
-
-  @override
-  bool apply({required Product product}) {
-    return product.category == filteredCategory;
-  }
-}
-
-class PriceFilter implements Filter {
-  final int filteredPrice;
-
-  PriceFilter({required this.filteredPrice});
-
-  @override
-  bool apply({required Product product}) {
-    return product.price <= filteredPrice;
-  }
-}
-
-class QuantityFilter implements Filter {
-  final int filteredQuantity;
-
-  QuantityFilter({required this.filteredQuantity});
-
-  @override
-  bool apply({required Product product}) {
-    return product.quantity <= filteredQuantity;
-  }
-}
-
-void applyFilter({
-  required List<Product> products,
-  required Filter filter,
-}) {
-  print('id\tКатегория\tНазвание\tЦена\tКоличество');
-
-  for (final product in products) {
-    if (filter.apply(product: product)) {
-      print(product);
-    }
-  }
 }
 
 void main() {
-  const articles = '''
-    1,хлеб,Бородинский,500,5
-    2,хлеб,Белый,200,15
-    3,молоко,Полосатый кот,50,53
-    4,молоко,Коровка,50,53
-    5,вода,Апельсин,25,100
-    6,вода,Бородинский,500,5
-    ''';
+  final products = [
+    RawProductItem(
+      name: 'Персик',
+      categoryName: 'Растительная пища',
+      subcategoryName: 'Фрукты',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 5,
+    ),
+    RawProductItem(
+      name: 'Молоко',
+      categoryName: 'Молочные продукты',
+      subcategoryName: 'Напитки',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 5,
+    ),
+    RawProductItem(
+      name: 'Кефир',
+      categoryName: 'Молочные продукты',
+      subcategoryName: 'Напитки',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 5,
+    ),
+    RawProductItem(
+      name: 'Творог',
+      categoryName: 'Молочные продукты',
+      subcategoryName: 'Не напитки',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Творожок',
+      categoryName: 'Молочные продукты',
+      subcategoryName: 'Не напитки',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Творог',
+      categoryName: 'Молочные продукты',
+      subcategoryName: 'Не напитки',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Гауда',
+      categoryName: 'Молочные продукты',
+      subcategoryName: 'Сыры',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 3,
+    ),
+    RawProductItem(
+      name: 'Маасдам',
+      categoryName: 'Молочные продукты',
+      subcategoryName: 'Сыры',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 2,
+    ),
+    RawProductItem(
+      name: 'Яблоко',
+      categoryName: 'Растительная пища',
+      subcategoryName: 'Фрукты',
+      expirationDate: DateTime(2022, 12, 4),
+      qty: 4,
+    ),
+    RawProductItem(
+      name: 'Морковь',
+      categoryName: 'Растительная пища',
+      subcategoryName: 'Овощи',
+      expirationDate: DateTime(2022, 12, 23),
+      qty: 51,
+    ),
+    RawProductItem(
+      name: 'Черника',
+      categoryName: 'Растительная пища',
+      subcategoryName: 'Ягоды',
+      expirationDate: DateTime(2022, 12, 25),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Курица',
+      categoryName: 'Мясо',
+      subcategoryName: 'Птица',
+      expirationDate: DateTime(2022, 12, 18),
+      qty: 2,
+    ),
+    RawProductItem(
+      name: 'Говядина',
+      categoryName: 'Мясо',
+      subcategoryName: 'Не птица',
+      expirationDate: DateTime(2022, 12, 17),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Телятина',
+      categoryName: 'Мясо',
+      subcategoryName: 'Не птица',
+      expirationDate: DateTime(2022, 12, 17),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Индюшатина',
+      categoryName: 'Мясо',
+      subcategoryName: 'Птица',
+      expirationDate: DateTime(2022, 12, 17),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Утка',
+      categoryName: 'Мясо',
+      subcategoryName: 'Птица',
+      expirationDate: DateTime(2022, 12, 18),
+      qty: 0,
+    ),
+    RawProductItem(
+      name: 'Гречка',
+      categoryName: 'Растительная пища',
+      subcategoryName: 'Крупы',
+      expirationDate: DateTime(2022, 12, 22),
+      qty: 8,
+    ),
+    RawProductItem(
+      name: 'Свинина',
+      categoryName: 'Мясо',
+      subcategoryName: 'Не птица',
+      expirationDate: DateTime(2022, 12, 23),
+      qty: 5,
+    ),
+    RawProductItem(
+      name: 'Груша',
+      categoryName: 'Растительная пища',
+      subcategoryName: 'Фрукты',
+      expirationDate: DateTime(2022, 12, 25),
+      qty: 5,
+    ),
+  ];
 
-  List<String> articlesStrings = articles.split('\n');
+  final result = {};
 
-  List<Product> products = [];
+  // for (final product in products) {
+  //   if (product.qty > 0 && product.expirationDate.isAfter(DateTime(2022, 12, 18))) {
+  //     final categoryName = product.categoryName;
+  //     final subcategoryName = product.subcategoryName;
+  //     final productName = product.name;
 
-  for (String articleAsList in articlesStrings) {
-    List<String> productAsList = articleAsList.split(',');
+  //     if (!result.containsKey(categoryName)) {
+  //       result[categoryName] = {};
+  //     }
 
-    if (productAsList.length == 5) {
-      int? id = int.tryParse(productAsList[0]);
-      String category = productAsList[1];
-      String name = productAsList[2];
-      int? price = int.tryParse(productAsList[3]);
-      int? quantity = int.tryParse(productAsList[4]);
+  //     final categoryMap = result[categoryName];
 
-      if (id != null && price != null && quantity != null) {
-        products.add(
-          Product(
-            id: id,
-            category: category,
-            name: name,
-            price: price,
-            quantity: quantity,
-          ),
-        );
-      }
-    }
-  }
+  //     if (!categoryMap.containsKey(subcategoryName)) {
+  //       categoryMap[subcategoryName] = [];
+  //     }
 
-  applyFilter(products: products, filter: CategoryFilter(filteredCategory: 'хлеб'));
+  //     final subcategoryList = categoryMap[subcategoryName];
+  //     subcategoryList.add(productName);
+  //   }
+  // }
 
-  print('\n');
+  products
+      .where(
+        (product) =>
+            product.qty > 0 &&
+            product.expirationDate.isAfter(
+              DateTime(2022, 12, 18),
+            ),
+      )
+      .forEach(
+        (product) => !result.containsKey(product.categoryName)
+            ? result[product.categoryName] = {
+                product.subcategoryName: [product.name]
+              }
+            : !result[product.categoryName]!.containsKey(product.subcategoryName)
+                ? result[product.categoryName]![product.subcategoryName] = [product.name]
+                : result[product.categoryName]![product.subcategoryName]!.add(product.name),
+      );
 
-  applyFilter(products: products, filter: PriceFilter(filteredPrice: 500));
-
-  print('\n');
-
-  applyFilter(products: products, filter: QuantityFilter(filteredQuantity: 10));
+  print(result);
 }
